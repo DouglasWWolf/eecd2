@@ -90,13 +90,13 @@ set_property PACKAGE_PIN E37 [get_ports qsfp1_tx_txn[3]]
  set_property  -dict {PACKAGE_PIN B5  IOSTANDARD LVCMOS33}  [get_ports {    channel_up_0}]
  set_property  -dict {PACKAGE_PIN A5  IOSTANDARD LVCMOS33}  [get_ports {   led_heartbeat}]
  set_property  -dict {PACKAGE_PIN A4  IOSTANDARD LVCMOS33}  [get_ports {    channel_up_1}]
-#set_property  -dict {PACKAGE_PIN C5  IOSTANDARD LVCMOS33}  [get_ports {    channel_up_1  }] ;# LED3
-#set_property  -dict {PACKAGE_PIN C6  IOSTANDARD LVCMOS33}  [get_ports { sys_reset_out_1  }] ;# LED4
-#set_property  -dict {PACKAGE_PIN C1  IOSTANDARD LVCMOS33}  [get_ports { c2c_link_status  }] ;# LED5
-#set_property  -dict {PACKAGE_PIN D2  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[0 }] ;# LED6
-#set_property  -dict {PACKAGE_PIN D3  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[1 }] ;# LED7
-#set_property  -dict {PACKAGE_PIN D4  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[2 }] ;# LED8
-#set_property  -dict {PACKAGE_PIN D1  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[3 }] ;# LED9
+#set_property  -dict {PACKAGE_PIN C5  IOSTANDARD LVCMOS33}  [get_ports {    channel_up_1   }] ;# LED3
+#set_property  -dict {PACKAGE_PIN C6  IOSTANDARD LVCMOS33}  [get_ports { sys_reset_out_1   }] ;# LED4
+#set_property  -dict {PACKAGE_PIN C1  IOSTANDARD LVCMOS33}  [get_ports { c2c_link_status   }] ;# LED5
+ set_property  -dict {PACKAGE_PIN D2  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[0] }] ;# LED6
+ set_property  -dict {PACKAGE_PIN D3  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[1] }] ;# LED7
+ set_property  -dict {PACKAGE_PIN D4  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[2] }] ;# LED8
+ set_property  -dict {PACKAGE_PIN D1  IOSTANDARD LVCMOS33}  [get_ports { GPIO_LED_tri_o[3] }] ;# LED9
 
 
 

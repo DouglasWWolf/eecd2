@@ -1,7 +1,7 @@
 //Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
-//Date        : Fri Dec  9 12:34:37 2022
+//Date        : Thu Dec 15 12:47:46 2022
 //Host        : simtool-5 running 64-bit Ubuntu 20.04.5 LTS
 //Command     : generate_target board_wrapper.bd
 //Design      : board_wrapper
@@ -10,7 +10,8 @@
 `timescale 1 ps / 1 ps
 
 module board_wrapper
-   (channel_up_0,
+   (GPIO_LED_tri_o,
+    channel_up_0,
     channel_up_1,
     clk_100mhz_clk_n,
     clk_100mhz_clk_p,
@@ -29,6 +30,7 @@ module board_wrapper
     qsfp1_rx_rxp,
     qsfp1_tx_txn,
     qsfp1_tx_txp);
+  output [3:0]GPIO_LED_tri_o;
   output channel_up_0;
   output channel_up_1;
   input [0:0]clk_100mhz_clk_n;
@@ -49,6 +51,7 @@ module board_wrapper
   output [0:3]qsfp1_tx_txn;
   output [0:3]qsfp1_tx_txp;
 
+  wire [3:0]GPIO_LED_tri_o;
   wire channel_up_0;
   wire channel_up_1;
   wire [0:0]clk_100mhz_clk_n;
@@ -70,7 +73,8 @@ module board_wrapper
   wire [0:3]qsfp1_tx_txp;
 
   board board_i
-       (.channel_up_0(channel_up_0),
+       (.GPIO_LED_tri_o(GPIO_LED_tri_o),
+        .channel_up_0(channel_up_0),
         .channel_up_1(channel_up_1),
         .clk_100mhz_clk_n(clk_100mhz_clk_n),
         .clk_100mhz_clk_p(clk_100mhz_clk_p),

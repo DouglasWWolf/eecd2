@@ -16,6 +16,7 @@ module bd_03ed_wrapper
     SLOT_1_AXIS_tready,
     SLOT_1_AXIS_tvalid,
     clk,
+    probe0,
     resetn);
   input [255:0]SLOT_0_AXIS_tdata;
   input SLOT_0_AXIS_tlast;
@@ -26,6 +27,7 @@ module bd_03ed_wrapper
   input SLOT_1_AXIS_tready;
   input SLOT_1_AXIS_tvalid;
   input clk;
+  input [63:0]probe0;
   input resetn;
 
   wire [255:0]SLOT_0_AXIS_tdata;
@@ -37,6 +39,7 @@ module bd_03ed_wrapper
   wire SLOT_1_AXIS_tready;
   wire SLOT_1_AXIS_tvalid;
   wire clk;
+  wire [63:0]probe0;
   wire resetn;
 
   bd_03ed bd_03ed_i
@@ -49,5 +52,6 @@ module bd_03ed_wrapper
         .SLOT_1_AXIS_tready(SLOT_1_AXIS_tready),
         .SLOT_1_AXIS_tvalid(SLOT_1_AXIS_tvalid),
         .clk(clk),
+        .probe0(probe0),
         .resetn(resetn));
 endmodule

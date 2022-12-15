@@ -14,7 +14,7 @@ preplace port qsfp0_rx -pg 1 -lvl 5 -x 1530 -y 200 -defaultsOSRD -right
 preplace port qsfp1_clk -pg 1 -lvl 0 -x 0 -y 620 -defaultsOSRD
 preplace port qsfp1_tx -pg 1 -lvl 5 -x 1530 -y 760 -defaultsOSRD
 preplace port qsfp1_rx -pg 1 -lvl 5 -x 1530 -y 780 -defaultsOSRD -right
-preplace port M_AXIS -pg 1 -lvl 5 -x 1530 -y 260 -defaultsOSRD
+preplace port AXI_STREAM_RX -pg 1 -lvl 5 -x 1530 -y 260 -defaultsOSRD
 preplace port port-id_channel_up_0 -pg 1 -lvl 5 -x 1530 -y 140 -defaultsOSRD
 preplace port port-id_init_clk -pg 1 -lvl 0 -x 0 -y 360 -defaultsOSRD
 preplace port port-id_axi_stream_clk -pg 1 -lvl 5 -x 1530 -y 500 -defaultsOSRD
@@ -29,35 +29,35 @@ preplace inst axis_rx_fifo_0 -pg 1 -lvl 3 -x 970 -y 60 -defaultsOSRD -pinDir S_A
 preplace inst axis_rx_fifo_1 -pg 1 -lvl 3 -x 970 -y 400 -swap {0 1 2 3 4 5 6 7 9 10 8} -defaultsOSRD -pinDir S_AXIS left -pinY S_AXIS 220L -pinDir M_AXIS right -pinY M_AXIS 0R -pinDir s_axis_aresetn left -pinY s_axis_aresetn 260L -pinDir s_axis_aclk left -pinY s_axis_aclk 280L -pinDir m_axis_aclk left -pinY m_axis_aclk 240L
 preplace inst axis_combiner -pg 1 -lvl 4 -x 1320 -y 260 -swap {0 1 2 3 8 5 6 7 4 9 10 11 13 12} -defaultsOSRD -pinDir M_AXIS right -pinY M_AXIS 0R -pinDir S00_AXIS left -pinY S00_AXIS 140L -pinDir S01_AXIS left -pinY S01_AXIS 0L -pinDir aclk left -pinY aclk 180L -pinDir aresetn left -pinY aresetn 160L
 preplace inst reset_inverter_1 -pg 1 -lvl 2 -x 570 -y 500 -swap {1 0} -defaultsOSRD -pinBusDir Op1 right -pinBusY Op1 20R -pinBusDir Res right -pinBusY Res 0R
+preplace netloc aurora_core_1_channel_up 1 2 3 NJ 740 NJ 740 NJ
+preplace netloc aurora_core_1_sys_reset_out 1 2 1 780 520n
+preplace netloc aurora_core_1_user_clk_out 1 2 1 820 680n
 preplace netloc aurora_core_channel_up1 1 2 3 NJ 140 NJ 140 NJ
 preplace netloc aurora_core_sys_reset_out 1 2 1 NJ 300
 preplace netloc aurora_core_user_clk_out 1 2 3 820 240 1120 500 NJ
 preplace netloc reset_in_1 1 0 1 NJ 440
+preplace netloc reset_inverter_1_Res 1 2 1 800J 500n
 preplace netloc reset_inverter_Res 1 3 2 1160 80 NJ
 preplace netloc reset_manager_0_pma_init_out 1 1 1 340 400n
 preplace netloc reset_manager_0_reset_pb_out 1 1 1 320 380n
 preplace netloc system_clock_IBUF_OUT 1 0 2 40 360 300
-preplace netloc aurora_core_1_channel_up 1 2 3 NJ 740 NJ 740 NJ
-preplace netloc aurora_core_1_user_clk_out 1 2 1 820 680n
-preplace netloc aurora_core_1_sys_reset_out 1 2 1 780 520n
-preplace netloc reset_inverter_1_Res 1 2 1 800J 500n
 preplace netloc Conn1 1 0 2 NJ 620 NJ
 preplace netloc Conn2 1 2 3 NJ 760 NJ 760 NJ
 preplace netloc Conn3 1 2 3 NJ 780 NJ 780 NJ
 preplace netloc GT_DIFF_REFCLK1_0_1 1 0 2 NJ 320 NJ
 preplace netloc GT_SERIAL_RX_0_1 1 2 3 NJ 200 NJ 200 NJ
-preplace netloc aurora_core_GT_SERIAL_TX 1 2 3 NJ 180 NJ 180 NJ
-preplace netloc bandwidth_test_0_OUT_AXIS 1 0 2 NJ 300 NJ
 preplace netloc aurora_core_0_USER_DATA_M_AXIS_RX 1 2 1 N 60
 preplace netloc aurora_core_1_USER_DATA_M_AXIS_RX 1 2 1 N 620
+preplace netloc aurora_core_GT_SERIAL_TX 1 2 3 NJ 180 NJ 180 NJ
 preplace netloc axis_combiner_M_AXIS 1 4 1 N 260
 preplace netloc axis_rx_fifo_0_M_AXIS 1 3 1 1140 60n
 preplace netloc axis_rx_fifo_1_M_AXIS 1 3 1 N 400
+preplace netloc bandwidth_test_0_OUT_AXIS 1 0 2 NJ 300 NJ
 levelinfo -pg 1 0 170 570 970 1320 1530
 pagesize -pg 1 -db -bbox -sgen -170 0 1750 1060
 ",
    "No Loops_ScaleFactor":"0.708491",
-   "No Loops_TopLeft":"-181,1",
+   "No Loops_TopLeft":"-191,0",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port AXI_STREAM_TX -pg 1 -lvl 0 -x 0 -y 240 -defaultsOSRD

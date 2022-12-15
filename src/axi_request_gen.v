@@ -11,18 +11,6 @@
 
 Usage:
 
-   This module is an AXI4-Lite slave that generates ECD data-requests
-
-   To use:
-       Register 0:  write = Sets the IRQ bits for the specified sources
-                    read  = Returns the current set of IRQ bits
-    
-       Register 1:  write = Clears the IRQ bits for the specified sources
-                    read  = Returns the count of IRQ_ACKs that have been generated
-
-    There are also four input ports IRQ0_IN, IRQ1_IN, IRQ2_IN, and IRQ3_IN.  Strobing
-    any of those input lines sets the relevant IRQ output line high.   This provides
-    a mechanism for raising an IRQ line that doesn't require an AXI transaction.
 
 */
 

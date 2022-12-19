@@ -15,9 +15,10 @@ module axis_consumer#
 (
     input clk,
     output reg row_complete,
+    output reg lvds_data,
 
-    // The number of data-cycles received in one second
-    output reg[63:0] throughput,
+    // The megabytes-per-second of data received. 1 MB = 1,048,576 bytes
+    output reg[31:0] mb_per_sec,
 
     //========================  AXI Stream interface for the input side  ============================
     input[DATA_WIDTH-1:0]    AXIS_TDATA,
@@ -50,14 +51,6 @@ reg[63:0] bytes_per_sec;
 
 always @(posedge clk) begin
 
-    if (clock_cycles == CYCLES_PER_SECOND) begin
-        throughput    <= bytes_per_sec;
-        bytes_per_sec <= 0;
-        clock_cycles  <= 0;
-    end else begin
-        clock_cycles <= clock_cycles + 1;
-    end
-
     // We're always ready to receive data
     AXIS_TREADY <= 1;
 
@@ -66,6 +59,9 @@ always @(posedge clk) begin
 
     // When this is active, it will strobe high for exactly one cycle
     row_complete <= 0;
+
+    // This will be high on any data-cycle where we are receiving LVDS row data
+    lvds_data <= 0;
 
     // Any time we've been idle for too long, we force "data_cycle_counter" to zero
     if (idle_countdown)
@@ -84,11 +80,15 @@ always @(posedge clk) begin
             AXI_REQ_TVALID       <= 1;                  // Emit this AXI read/write request
         end else begin
 
+            // This data cycle contains LVDS data
+            lvds_data <= 1;
+
             // Receiving data means we're no longer idle
             idle_countdown <= 400000000;
 
-            // Keep track of how much data bas been transferred
-            bytes_per_sec <= bytes_per_sec + 64;
+            if (data_cycle_counter != 0 && data_cycle_counter != 33) begin
+                bytes_per_sec <= bytes_per_sec + 64;
+            end
 
             // If this is the 34th cycle, strobe "row_complete", and start counting
             // data cycles over again
@@ -102,6 +102,15 @@ always @(posedge clk) begin
             else data_cycle_counter <= data_cycle_counter + 1;
         end
     end 
+
+    // Once every second, compute the "megabytes per second" throughput rate
+    if (clock_cycles == CYCLES_PER_SECOND) begin
+        mb_per_sec    <= bytes_per_sec >> 20;
+        bytes_per_sec <= 0;
+        clock_cycles  <= 0;
+    end else begin
+        clock_cycles <= clock_cycles + 1;
+    end
 
 end
 

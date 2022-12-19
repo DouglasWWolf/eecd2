@@ -119,20 +119,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/src/axi4_lite_slave.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/src/axi_request_gen.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/src/axi4_lite_master.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -147,71 +133,85 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/src/axi4_lite_slave.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/src/axi_request_gen.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/bd/board/board.bd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_util_vector_logic_0_1/board_util_vector_logic_0_1.xci">
-          <Proxy FileSetName="board_util_vector_logic_0_1"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_button_0_0/board_button_0_0.xci">
-          <Proxy FileSetName="board_button_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_0/board_axis_data_fifo_0_0.xci">
-          <Proxy FileSetName="board_axis_data_fifo_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_xpm_cdc_gen_0_0/board_xpm_cdc_gen_0_0.xci">
-          <Proxy FileSetName="board_xpm_cdc_gen_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_3/board_axis_data_fifo_0_3.xci">
-          <Proxy FileSetName="board_axis_data_fifo_0_3"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_consumer_0_0/board_axis_consumer_0_0.xci">
-          <Proxy FileSetName="board_axis_consumer_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axi_request_gen_0_0/board_axi_request_gen_0_0.xci">
           <Proxy FileSetName="board_axi_request_gen_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_system_ila_0_5/board_system_ila_0_5.xci">
-          <Proxy FileSetName="board_system_ila_0_5"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axi_gpio_0_0/board_axi_gpio_0_0.xci">
-          <Proxy FileSetName="board_axi_gpio_0_0"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axi_request_proxy_0_0/board_axi_request_proxy_0_0.xci">
           <Proxy FileSetName="board_axi_request_proxy_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_aurora_64b66b_0_2/board_aurora_64b66b_0_2.xci">
-          <Proxy FileSetName="board_aurora_64b66b_0_2"/>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axi_gpio_0_0/board_axi_gpio_0_0.xci">
+          <Proxy FileSetName="board_axi_gpio_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_binker_0_0/board_binker_0_0.xci">
-          <Proxy FileSetName="board_binker_0_0"/>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_system_ila_0_5/board_system_ila_0_5.xci">
+          <Proxy FileSetName="board_system_ila_0_5"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_consumer_0_0/board_axis_consumer_0_0.xci">
+          <Proxy FileSetName="board_axis_consumer_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_3/board_axis_data_fifo_0_3.xci">
+          <Proxy FileSetName="board_axis_data_fifo_0_3"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_xpm_cdc_gen_0_0/board_xpm_cdc_gen_0_0.xci">
+          <Proxy FileSetName="board_xpm_cdc_gen_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_0/board_axis_data_fifo_0_0.xci">
+          <Proxy FileSetName="board_axis_data_fifo_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_button_0_0/board_button_0_0.xci">
+          <Proxy FileSetName="board_button_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_reset_inverter_0_0/board_reset_inverter_0_0.xci">
+          <Proxy FileSetName="board_reset_inverter_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_combiner_0_0/board_axis_combiner_0_0.xci">
+          <Proxy FileSetName="board_axis_combiner_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_2/board_axis_data_fifo_0_2.xci">
+          <Proxy FileSetName="board_axis_data_fifo_0_2"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_util_ds_buf_0_0/board_util_ds_buf_0_0.xci">
+          <Proxy FileSetName="board_util_ds_buf_0_0"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_proc_sys_reset_0_0/board_proc_sys_reset_0_0.xci">
           <Proxy FileSetName="board_proc_sys_reset_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_util_ds_buf_0_0/board_util_ds_buf_0_0.xci">
-          <Proxy FileSetName="board_util_ds_buf_0_0"/>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_binker_0_0/board_binker_0_0.xci">
+          <Proxy FileSetName="board_binker_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_aurora_64b66b_0_2/board_aurora_64b66b_0_2.xci">
+          <Proxy FileSetName="board_aurora_64b66b_0_2"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_reset_manager_0_0/board_reset_manager_0_0.xci">
+          <Proxy FileSetName="board_reset_manager_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_util_vector_logic_0_1/board_util_vector_logic_0_1.xci">
+          <Proxy FileSetName="board_util_vector_logic_0_1"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_aurora_64b66b_0_1/board_aurora_64b66b_0_1.xci">
           <Proxy FileSetName="board_aurora_64b66b_0_1"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_1/board_axis_data_fifo_0_1.xci">
           <Proxy FileSetName="board_axis_data_fifo_0_1"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_data_fifo_0_2/board_axis_data_fifo_0_2.xci">
-          <Proxy FileSetName="board_axis_data_fifo_0_2"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_axis_combiner_0_0/board_axis_combiner_0_0.xci">
-          <Proxy FileSetName="board_axis_combiner_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_reset_inverter_0_0/board_reset_inverter_0_0.xci">
-          <Proxy FileSetName="board_reset_inverter_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="board.bd" FileRelPathName="ip/board_reset_manager_0_0/board_reset_manager_0_0.xci">
-          <Proxy FileSetName="board_reset_manager_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PGENDIR/sources_1/bd/board/hdl/board_wrapper.v">
@@ -596,9 +596,7 @@
     </Run>
     <Run Id="board_axi_request_gen_0_0_synth_1" Type="Ft3:Synth" SrcSet="board_axi_request_gen_0_0" Part="xczu19eg-ffvc1760-2-i" ConstrsSet="board_axi_request_gen_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/board_axi_request_gen_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
@@ -935,9 +933,7 @@
     </Run>
     <Run Id="board_axi_request_gen_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu19eg-ffvc1760-2-i" ConstrsSet="board_axi_request_gen_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="board_axi_request_gen_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/board_axi_request_gen_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

@@ -791,10 +791,13 @@
             "type": "rst",
             "direction": "I"
           },
-          "throughput1": {
+          "mb_per_sec": {
             "direction": "O",
-            "left": "63",
+            "left": "31",
             "right": "0"
+          },
+          "lvds_data": {
+            "direction": "O"
           }
         },
         "components": {
@@ -1001,9 +1004,12 @@
               "row_complete": {
                 "direction": "O"
               },
-              "throughput": {
+              "lvds_data": {
+                "direction": "O"
+              },
+              "mb_per_sec": {
                 "direction": "O",
-                "left": "63",
+                "left": "31",
                 "right": "0"
               }
             }
@@ -1042,6 +1048,20 @@
               "axi_request_fifo/m_axis_aclk"
             ]
           },
+          "lvds_data": {
+            "ports": [
+              "axis_consumer/lvds_data",
+              "lvds_data"
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
+                "value": "true"
+              }
+            }
+          },
           "qsfp_data_user_clk_out": {
             "ports": [
               "stream_clk",
@@ -1070,8 +1090,8 @@
           },
           "throughput": {
             "ports": [
-              "axis_consumer/throughput",
-              "throughput1"
+              "axis_consumer/mb_per_sec",
+              "mb_per_sec"
             ],
             "hdl_attributes": {
               "DEBUG": {
@@ -1097,9 +1117,12 @@
             "value": "2"
           },
           "C_NUM_OF_PROBES": {
-            "value": "1"
+            "value": "2"
           },
           "C_PROBE0_TYPE": {
+            "value": "0"
+          },
+          "C_PROBE1_TYPE": {
             "value": "0"
           },
           "C_SLOT_0_APC_EN": {
@@ -2044,9 +2067,20 @@
           "led_heartbeat"
         ]
       },
+      "consumer_lvds_data1": {
+        "ports": [
+          "consumer/lvds_data",
+          "ila_402_mhz/probe1"
+        ],
+        "hdl_attributes": {
+          "DEBUG": {
+            "value": "true"
+          }
+        }
+      },
       "consumer_throughput1": {
         "ports": [
-          "consumer/throughput1",
+          "consumer/mb_per_sec",
           "ila_402_mhz/probe0"
         ],
         "hdl_attributes": {

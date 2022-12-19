@@ -2051,16 +2051,6 @@
           "request_button/PIN"
         ]
       },
-      "axi_c2c_link_error_out": {
-        "hdl_attributes": {
-          "DEBUG": {
-            "value": "true"
-          },
-          "MARK_DEBUG": {
-            "value": "true"
-          }
-        }
-      },
       "binker_0_LED": {
         "ports": [
           "blinker/LED",
@@ -2094,16 +2084,6 @@
           "pb_rst_n",
           "system_reset/ext_reset_in"
         ]
-      },
-      "gt_reset_out": {
-        "hdl_attributes": {
-          "DEBUG": {
-            "value": "true"
-          },
-          "MARK_DEBUG": {
-            "value": "true"
-          }
-        }
       },
       "qsfp_data_channel_up_0": {
         "ports": [

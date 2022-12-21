@@ -10,7 +10,7 @@
 module reset_manager
 (
     // Clock and input reset signal.
-    input clock, reset_in,
+    input clock, resetn_in,
     
     (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 reset_pb_out RST" *)
     (* X_INTERFACE_PARAMETER = "POLARITY ACTIVE_HIGH" *)
@@ -33,7 +33,7 @@ always @(posedge clock) begin
     case(state)
 
         // When reset_in becomes active, assert reset_pb_out and wait for 128 clock cycles
-        0:  if (reset_in) begin
+        0:  if (resetn_in == 0) begin
                 reset_pb_out <= 1;
                 counter      <= 128;
                 state        <= 1;                                

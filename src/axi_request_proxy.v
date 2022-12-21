@@ -15,13 +15,19 @@
 module axi_request_proxy
 (
     input clk, resetn,
+    output[2:0] DBG_FSM_STATE,
 
     //========================  AXI Stream interface for the input side  ============================
-    input[71:0]    AXIS_TDATA,
-    input          AXIS_TVALID,
-    output reg     AXIS_TREADY,
+    input[71:0]    AXIS_IN_TDATA,
+    input          AXIS_IN_TVALID,
+    output reg     AXIS_IN_TREADY,
     //===============================================================================================
 
+    //========================  AXI Stream interface for the input side  ============================
+    output[255:0]  AXIS_OUT_TDATA,
+    output reg     AXIS_OUT_TVALID,
+    input          AXIS_OUT_TREADY,
+    //===============================================================================================
 
 
     //============================  An AXI-Lite Master Interface  ===================================
@@ -82,31 +88,88 @@ module axi_request_proxy
     //===============================================================================================
 
 
-    reg fsm_state;
+    //===============================================================================================
+    // Field definitions for the TDATA lines
+    //===============================================================================================
+    wire[31:0] axi_addr_in = AXIS_IN_TDATA[31:00];
+    wire[31:0] axi_data_in = AXIS_IN_TDATA[63:32];
+    wire       axi_mode_in = AXIS_IN_TDATA[64];
+
+    reg[31:0] axi_addr_out; assign AXIS_OUT_TDATA[31:00] = axi_addr_out;
+    reg[31:0] axi_data_out; assign AXIS_OUT_TDATA[63:32] = axi_data_out;
+    reg[ 1:0] axi_resp_out; assign AXIS_OUT_TDATA[65:64] = axi_resp_out;
+    //===============================================================================================
+
+    localparam FSM_START              = 0;
+    localparam FSM_WAIT_FOR_CMD       = 1;
+    localparam FSM_WAIT_FOR_AXI_WRITE = 2;
+    localparam FSM_WAIT_FOR_AXI_READ  = 3;
+    localparam FSM_STREAM_HANDSHAKE   = 4;
+
+    reg[2:0] fsm_state;
 
     always @(posedge clk) begin
         
+        // When these are raised, they strobe high for exactly 1 clock cycle
         amci_write <= 0;
+        amci_read  <= 0;
 
         if (resetn == 0) begin
-            fsm_state   <= 0;
-            AXIS_TREADY <= 0;
+            fsm_state       <= 0;
+            AXIS_IN_TREADY  <= 0;
+            AXIS_OUT_TVALID <= 0;
         end
 
         else case (fsm_state)
 
-            0:  begin
-                    AXIS_TREADY <= 1;
-                    if (AXIS_TREADY & AXIS_TVALID) begin
-                        AXIS_TREADY <= 0;
-                        amci_waddr  <= AXIS_TDATA[63:32];
-                        amci_wdata  <= AXIS_TDATA[31:00];
-                        amci_write  <= 1;
-                        fsm_state   <= 1;
-                    end
+            FSM_START:
+                begin
+                    AXIS_IN_TREADY <= 1;
+                    fsm_state      <= FSM_WAIT_FOR_CMD;
                 end
             
-            1:  if (amci_widle) fsm_state <= 0;
+            FSM_WAIT_FOR_CMD:
+                if (AXIS_IN_TREADY & AXIS_IN_TVALID) begin
+                   AXIS_IN_TREADY <= 0;
+
+                    if (axi_mode_in == 0) begin
+                        amci_waddr  <= axi_addr_in;
+                        amci_wdata  <= axi_data_in;
+                        amci_write  <= 1;
+                        fsm_state   <= FSM_WAIT_FOR_AXI_WRITE;
+                    end else begin
+                        amci_raddr  <= axi_addr_in;
+                        amci_read   <= 1;
+                        fsm_state   <= FSM_WAIT_FOR_AXI_READ;
+                    end
+
+                end
+            
+            FSM_WAIT_FOR_AXI_WRITE:
+                if (amci_widle) begin
+                    axi_addr_out    <= amci_waddr;
+                    axi_data_out    <= amci_wdata;
+                    axi_resp_out    <= amci_wresp;
+                    AXIS_OUT_TVALID <= 1;
+                    fsm_state       <= FSM_STREAM_HANDSHAKE;
+                end
+            
+            FSM_WAIT_FOR_AXI_READ:
+                if (amci_ridle) begin
+                    axi_addr_out    <= amci_raddr;
+                    axi_data_out    <= amci_rdata;
+                    axi_resp_out    <= amci_rresp;
+                    AXIS_OUT_TVALID <= 1;
+                    fsm_state       <= FSM_STREAM_HANDSHAKE;                    
+                end
+            
+            FSM_STREAM_HANDSHAKE:
+                if (AXIS_OUT_TVALID & AXIS_OUT_TREADY) begin
+                    AXIS_OUT_TVALID <= 0;
+                    AXIS_IN_TREADY  <= 1;
+                    fsm_state       <= FSM_WAIT_FOR_CMD;
+                end
+
 
         endcase
         
@@ -171,7 +234,7 @@ module axi_request_proxy
     );
     //===============================================================================================
 
-
+    assign DBG_FSM_STATE = fsm_state;
 
 
 endmodule

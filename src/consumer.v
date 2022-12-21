@@ -21,17 +21,31 @@ module axis_consumer#
     output reg[31:0] mb_per_sec,
 
     //========================  AXI Stream interface for the input side  ============================
-    input[DATA_WIDTH-1:0]    AXIS_TDATA,
-    input                    AXIS_TVALID,
-    output reg               AXIS_TREADY,
+    input[DATA_WIDTH-1:0]    AXIS_IN_TDATA,
+    input                    AXIS_IN_TVALID,
+    output reg               AXIS_IN_TREADY,
     //===============================================================================================
 
     //========================  AXI Stream interface for AXI requests==  ============================
-    output reg[71:0] AXI_REQ_TDATA,
-    output reg       AXI_REQ_TVALID,
-    input            AXI_REQ_TREADY
+    output [71:0] AXI_REQ_TDATA,
+    output reg    AXI_REQ_TVALID,
+    input         AXI_REQ_TREADY
     //===============================================================================================
 );
+
+//===============================================================================================
+// Field definitions for the TDATA lines
+//===============================================================================================
+wire[31:0] axi_addr_in  = AXIS_IN_TDATA[31:00];
+wire[31:0] axi_data_in  = AXIS_IN_TDATA[63:32];
+wire       axi_mode_in  = AXIS_IN_TDATA[64];
+
+reg[31:0] axi_addr_out; assign AXI_REQ_TDATA[31:00] = axi_addr_out;
+reg[31:0] axi_data_out; assign AXI_REQ_TDATA[63:32] = axi_data_out;
+reg       axi_mode_out; assign AXI_REQ_TDATA[64   ] = axi_mode_out;
+//===============================================================================================
+
+
 
 // This is the frequency of 'clk'
 localparam CYCLES_PER_SECOND = 402832031;
@@ -57,7 +71,7 @@ reg[1:0] csm_state;
 always @(posedge clk) begin
 
     // We're always ready to receive data
-    AXIS_TREADY <= 1;
+    AXIS_IN_TREADY <= 1;
 
     // When this is raised, it strobes high for exactly one cycle
     AXI_REQ_TVALID <= 0;
@@ -77,14 +91,14 @@ always @(posedge clk) begin
     case(csm_state)
         
         // Waiting for the first data-cycle of a packet
-        0:  if (AXIS_TVALID & AXIS_TREADY) begin
+        0:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
          
                 // If this cycle is an AXI read/write request...
-                if (AXIS_TDATA[511:448] == 64'hBEADCAFEFADEDBAD) begin
-                    AXI_REQ_TDATA[31: 0] <= AXIS_TDATA[31: 0];  // Fill in the data-word in AXIS_TDATA
-                    AXI_REQ_TDATA[63:32] <= AXIS_TDATA[63:32];  // Fill in the AXI address in AXIS_TDATA
-                    AXI_REQ_TDATA[71:64] <= 0;                  // Assume this is an AXI write-request
-                    AXI_REQ_TVALID       <= 1;                  // Emit this AXI read/write request
+                if (AXIS_IN_TDATA[511:448] == 64'hBEADCAFEFADEDBAD) begin
+                    axi_data_out   <= axi_data_in;  // Fill in the data-word in AXIS_IN_TDATA
+                    axi_addr_out   <= axi_addr_in;  // Fill in the AXI address in AXIS_IN_TDATA
+                    axi_mode_out   <= axi_mode_in;  // Assume this is an AXI write-request
+                    AXI_REQ_TVALID <= 1;            // Emit this AXI read/write request
                 end
 
                 else begin
@@ -104,7 +118,7 @@ always @(posedge clk) begin
             end
         
         // Here we're waiting for all the data-cycles containing row-data to arrive
-        1:  if (AXIS_TVALID & AXIS_TREADY) begin
+        1:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
     
                 // Accumulate a total of data-bytes received
                 bytes_per_sec <= bytes_per_sec + 64;
@@ -122,7 +136,7 @@ always @(posedge clk) begin
             end
 
         // Here we're waiting for the row-trailer data-cycle
-        2:  if (AXIS_TVALID & AXIS_TREADY) begin
+        2:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
                 row_complete <= 1;
                 csm_state    <= 0;
             end

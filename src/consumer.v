@@ -36,6 +36,8 @@ module axis_consumer#
 //===============================================================================================
 // Field definitions for the TDATA lines
 //===============================================================================================
+wire[7:0]  packet_type  = AXIS_IN_TDATA[511:504];
+
 wire[31:0] axi_addr_in  = AXIS_IN_TDATA[31:00];
 wire[31:0] axi_data_in  = AXIS_IN_TDATA[63:32];
 wire       axi_mode_in  = AXIS_IN_TDATA[64];
@@ -94,7 +96,7 @@ always @(posedge clk) begin
         0:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
          
                 // If this cycle is an AXI read/write request...
-                if (AXIS_IN_TDATA[511:448] == 64'hBEADCAFEFADEDBAD) begin
+                if (packet_type == 1) begin
                     axi_data_out   <= axi_data_in;  // Fill in the data-word in AXIS_IN_TDATA
                     axi_addr_out   <= axi_addr_in;  // Fill in the AXI address in AXIS_IN_TDATA
                     axi_mode_out   <= axi_mode_in;  // Assume this is an AXI write-request

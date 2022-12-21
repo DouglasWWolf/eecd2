@@ -7,7 +7,8 @@
       "name": "board",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2021.1"
+      "tool_version": "2021.1",
+      "validated": "true"
     },
     "design_tree": {
       "system_clock": "",
@@ -26,7 +27,6 @@
       },
       "request_button": "",
       "request_fifo": "",
-      "ila_100mhz": "",
       "consumer": {
         "row_complete_cdc": "",
         "axi_request_fifo": "",
@@ -42,13 +42,27 @@
       "clk_100mhz": {
         "mode": "Slave",
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
-        "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0"
+        "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
+        "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
+          "FREQ_HZ": {
+            "value": "100000000",
+            "value_src": "default"
+          }
+        }
       },
       "qsfp1_clk": {
         "mode": "Slave",
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
         "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
         "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
           "FREQ_HZ": {
             "value": "322265625"
           }
@@ -69,6 +83,10 @@
         "vlnv_bus_definition": "xilinx.com:interface:diff_clock:1.0",
         "vlnv": "xilinx.com:interface:diff_clock_rtl:1.0",
         "parameters": {
+          "CAN_DEBUG": {
+            "value": "false",
+            "value_src": "default"
+          },
           "FREQ_HZ": {
             "value": "322265625"
           }
@@ -96,7 +114,17 @@
       },
       "pb_rst_n": {
         "type": "rst",
-        "direction": "I"
+        "direction": "I",
+        "parameters": {
+          "INSERT_VIP": {
+            "value": "0",
+            "value_src": "default"
+          },
+          "POLARITY": {
+            "value": "ACTIVE_LOW",
+            "value_src": "default"
+          }
+        }
       },
       "pb_req": {
         "direction": "I"
@@ -692,71 +720,6 @@
           }
         }
       },
-      "ila_100mhz": {
-        "vlnv": "xilinx.com:ip:system_ila:1.1",
-        "xci_name": "board_system_ila_1_0",
-        "xci_path": "ip/board_system_ila_1_0/board_system_ila_1_0.xci",
-        "inst_hier_path": "ila_100mhz",
-        "parameters": {
-          "C_DATA_DEPTH": {
-            "value": "2048"
-          },
-          "C_MON_TYPE": {
-            "value": "NATIVE"
-          },
-          "C_NUM_MONITOR_SLOTS": {
-            "value": "1"
-          },
-          "C_NUM_OF_PROBES": {
-            "value": "1"
-          },
-          "C_PROBE1_TYPE": {
-            "value": "0"
-          },
-          "C_SLOT_0_APC_EN": {
-            "value": "0"
-          },
-          "C_SLOT_0_AXI_AR_SEL_DATA": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_AR_SEL_TRIG": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_AW_SEL_DATA": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_AW_SEL_TRIG": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_B_SEL_DATA": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_B_SEL_TRIG": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_DATA_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_R_SEL_DATA": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_R_SEL_TRIG": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_TRIG_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_W_SEL_DATA": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_W_SEL_TRIG": {
-            "value": "1"
-          },
-          "C_SLOT_0_INTF_TYPE": {
-            "value": "xilinx.com:interface:axis_rtl:1.0"
-          }
-        }
-      },
       "consumer": {
         "interface_ports": {
           "AXIS_STREAM_RX": {
@@ -881,7 +844,7 @@
                   },
                   "PHASE": {
                     "value": "0",
-                    "value_src": "default_prop"
+                    "value_src": "user_prop"
                   },
                   "CLK_DOMAIN": {
                     "value": "board_aurora_64b66b_0_2_user_clk_out",
@@ -948,7 +911,7 @@
                   },
                   "PHASE": {
                     "value": "0",
-                    "value_src": "default_prop"
+                    "value_src": "user_prop"
                   },
                   "CLK_DOMAIN": {
                     "value": "board_aurora_64b66b_0_2_user_clk_out",
@@ -988,7 +951,7 @@
                   },
                   "PHASE": {
                     "value": "0",
-                    "value_src": "default_prop"
+                    "value_src": "user_prop"
                   },
                   "CLK_DOMAIN": {
                     "value": "board_aurora_64b66b_0_2_user_clk_out",
@@ -1861,7 +1824,7 @@
               "AWPROT": {
                 "physical_name": "M_AXI_AWPROT",
                 "direction": "O",
-                "left": "1",
+                "left": "2",
                 "right": "0"
               },
               "AWVALID": {
@@ -1915,7 +1878,7 @@
               "ARPROT": {
                 "physical_name": "M_AXI_ARPROT",
                 "direction": "O",
-                "left": "1",
+                "left": "2",
                 "right": "0"
               },
               "ARVALID": {
@@ -1981,11 +1944,6 @@
                 "value_src": "constant"
               }
             }
-          },
-          "DBG_FSM_STATE": {
-            "direction": "O",
-            "left": "2",
-            "right": "0"
           }
         },
         "addressing": {
@@ -2182,8 +2140,7 @@
       "row_complete_cdc_dest_pulse": {
         "ports": [
           "consumer/row_complete",
-          "request_generator/ROW_COMPLETE",
-          "ila_100mhz/probe0"
+          "request_generator/ROW_COMPLETE"
         ]
       },
       "system_clock_IBUF_OUT": {
@@ -2193,7 +2150,6 @@
           "blinker/CLK",
           "qsfp_data/init_clk",
           "request_fifo/s_axis_aclk",
-          "ila_100mhz/clk",
           "request_button/CLK",
           "consumer/row_complete_clk",
           "axi_gpio_leds/s_axi_aclk",

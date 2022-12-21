@@ -15,15 +15,15 @@
 module axi_request_proxy
 (
     input clk, resetn,
-    output[2:0] DBG_FSM_STATE,
 
-    //========================  AXI Stream interface for the input side  ============================
+    //=========================  Stream interface for the AXI request  ==============================
     input[71:0]    AXIS_IN_TDATA,
     input          AXIS_IN_TVALID,
     output reg     AXIS_IN_TREADY,
     //===============================================================================================
 
-    //========================  AXI Stream interface for the input side  ============================
+
+    //=========================  Stream interface for the AXI response  =============================
     output[255:0]  AXIS_OUT_TDATA,
     output reg     AXIS_OUT_TVALID,
     input          AXIS_OUT_TREADY,
@@ -35,7 +35,7 @@ module axi_request_proxy
     // "Specify write address"        -- Master --    -- Slave --
     output[`M_AXI_ADDR_WIDTH-1:0]     M_AXI_AWADDR,   
     output                            M_AXI_AWVALID,  
-    output[1:0]                       M_AXI_AWPROT,
+    output[2:0]                       M_AXI_AWPROT,
     input                                             M_AXI_AWREADY,
 
     // "Write Data"                   -- Master --    -- Slave --
@@ -52,7 +52,7 @@ module axi_request_proxy
     // "Specify read address"         -- Master --    -- Slave --
     output[`M_AXI_ADDR_WIDTH-1:0]     M_AXI_ARADDR,     
     output                            M_AXI_ARVALID,
-    output[1:0]                       M_AXI_ARPROT,     
+    output[2:0]                       M_AXI_ARPROT,     
     input                                             M_AXI_ARREADY,
 
     // "Read data back to master"     -- Master --    -- Slave --
@@ -70,7 +70,6 @@ module axi_request_proxy
     //===============================================================================================
     // We'll communicate with the AXI4-Lite Master core with these signals.
     //===============================================================================================
-
 
     // AXI Master Control Interface for AXI writes
     reg [M_AXI_ADDR_WIDTH-1:0] amci_waddr;
@@ -100,12 +99,15 @@ module axi_request_proxy
     reg[ 1:0] axi_resp_out; assign AXIS_OUT_TDATA[65:64] = axi_resp_out;
     //===============================================================================================
 
+
+    // State definitions for the state machine
     localparam FSM_START              = 0;
     localparam FSM_WAIT_FOR_CMD       = 1;
     localparam FSM_WAIT_FOR_AXI_WRITE = 2;
     localparam FSM_WAIT_FOR_AXI_READ  = 3;
     localparam FSM_STREAM_HANDSHAKE   = 4;
 
+    // This is the state of our state machine
     reg[2:0] fsm_state;
 
     always @(posedge clk) begin
@@ -233,8 +235,5 @@ module axi_request_proxy
         .AMCI_RIDLE     (amci_ridle)
     );
     //===============================================================================================
-
-    assign DBG_FSM_STATE = fsm_state;
-
 
 endmodule

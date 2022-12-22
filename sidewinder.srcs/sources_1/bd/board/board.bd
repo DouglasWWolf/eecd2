@@ -30,9 +30,9 @@
       "consumer": {
         "row_complete_cdc": "",
         "axi_request_fifo": "",
+        "ila_rx_data_402": "",
         "axis_consumer": ""
       },
-      "ila_402_mhz": "",
       "axi_gpio_leds": "",
       "system_interconnect": "",
       "request_generator": "",
@@ -748,14 +748,6 @@
           "stream_aresetn": {
             "type": "rst",
             "direction": "I"
-          },
-          "mb_per_sec": {
-            "direction": "O",
-            "left": "31",
-            "right": "0"
-          },
-          "lvds_data": {
-            "direction": "O"
           }
         },
         "components": {
@@ -787,6 +779,87 @@
               },
               "IS_ACLK_ASYNC": {
                 "value": "1"
+              }
+            }
+          },
+          "ila_rx_data_402": {
+            "vlnv": "xilinx.com:ip:system_ila:1.1",
+            "xci_name": "board_system_ila_0_5",
+            "xci_path": "ip/board_system_ila_0_5/board_system_ila_0_5.xci",
+            "inst_hier_path": "consumer/ila_rx_data_402",
+            "parameters": {
+              "C_MON_TYPE": {
+                "value": "MIX"
+              },
+              "C_NUM_MONITOR_SLOTS": {
+                "value": "1"
+              },
+              "C_NUM_OF_PROBES": {
+                "value": "5"
+              },
+              "C_PROBE0_TYPE": {
+                "value": "0"
+              },
+              "C_PROBE1_TYPE": {
+                "value": "0"
+              },
+              "C_PROBE2_TYPE": {
+                "value": "0"
+              },
+              "C_PROBE3_TYPE": {
+                "value": "0"
+              },
+              "C_PROBE4_TYPE": {
+                "value": "0"
+              },
+              "C_SLOT_0_APC_EN": {
+                "value": "0"
+              },
+              "C_SLOT_0_AXI_DATA_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_0_AXI_TRIG_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_0_INTF_TYPE": {
+                "value": "xilinx.com:interface:axis_rtl:1.0"
+              },
+              "C_SLOT_0_TYPE": {
+                "value": "0"
+              },
+              "C_SLOT_1_APC_EN": {
+                "value": "0"
+              },
+              "C_SLOT_1_AXI_DATA_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_1_AXI_TRIG_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_1_INTF_TYPE": {
+                "value": "xilinx.com:interface:axis_rtl:1.0"
+              },
+              "C_SLOT_1_TYPE": {
+                "value": "0"
+              },
+              "C_SLOT_2_APC_EN": {
+                "value": "0"
+              },
+              "C_SLOT_2_AXI_DATA_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_2_AXI_TRIG_SEL": {
+                "value": "1"
+              },
+              "C_SLOT_2_INTF_TYPE": {
+                "value": "xilinx.com:interface:axis_rtl:1.0"
+              }
+            },
+            "interface_ports": {
+              "SLOT_0_AXIS": {
+                "mode": "Monitor",
+                "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
+                "vlnv": "xilinx.com:interface:axis_rtl:1.0"
               }
             }
           },
@@ -969,6 +1042,21 @@
                 "direction": "O",
                 "left": "31",
                 "right": "0"
+              },
+              "rows_rcvd": {
+                "direction": "O",
+                "left": "63",
+                "right": "0"
+              },
+              "elapsed_secs": {
+                "direction": "O",
+                "left": "31",
+                "right": "0"
+              },
+              "ERRORS": {
+                "direction": "O",
+                "left": "31",
+                "right": "0"
               }
             }
           }
@@ -977,10 +1065,14 @@
           "AXIS1_1": {
             "interface_ports": [
               "AXIS_STREAM_RX",
-              "axis_consumer/AXIS_IN"
+              "axis_consumer/AXIS_IN",
+              "ila_rx_data_402/SLOT_0_AXIS"
             ],
             "hdl_attributes": {
               "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
                 "value": "true"
               }
             }
@@ -999,6 +1091,62 @@
           }
         },
         "nets": {
+          "axis_consumer_ERRORS": {
+            "ports": [
+              "axis_consumer/ERRORS",
+              "ila_rx_data_402/probe2"
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
+                "value": "true"
+              }
+            }
+          },
+          "axis_consumer_lvds_data": {
+            "ports": [
+              "axis_consumer/lvds_data",
+              "ila_rx_data_402/probe1"
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
+                "value": "true"
+              }
+            }
+          },
+          "axis_consumer_mb_per_sec": {
+            "ports": [
+              "axis_consumer/mb_per_sec",
+              "ila_rx_data_402/probe0"
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
+                "value": "true"
+              }
+            }
+          },
+          "axis_consumer_rows_rcvd": {
+            "ports": [
+              "axis_consumer/rows_rcvd",
+              "ila_rx_data_402/probe3"
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              },
+              "MARK_DEBUG": {
+                "value": "true"
+              }
+            }
+          },
           "dest_clk_1": {
             "ports": [
               "row_complete_clk",
@@ -1006,10 +1154,10 @@
               "axi_request_fifo/m_axis_aclk"
             ]
           },
-          "lvds_data": {
+          "elapsed_secs": {
             "ports": [
-              "axis_consumer/lvds_data",
-              "lvds_data"
+              "axis_consumer/elapsed_secs",
+              "ila_rx_data_402/probe4"
             ],
             "hdl_attributes": {
               "DEBUG": {
@@ -1025,6 +1173,7 @@
               "stream_clk",
               "row_complete_cdc/src_clk",
               "axi_request_fifo/s_axis_aclk",
+              "ila_rx_data_402/clk",
               "axis_consumer/clk"
             ]
           },
@@ -1043,94 +1192,9 @@
           "s_axis_aresetn_1": {
             "ports": [
               "stream_aresetn",
-              "axi_request_fifo/s_axis_aresetn"
+              "axi_request_fifo/s_axis_aresetn",
+              "ila_rx_data_402/resetn"
             ]
-          },
-          "throughput": {
-            "ports": [
-              "axis_consumer/mb_per_sec",
-              "mb_per_sec"
-            ],
-            "hdl_attributes": {
-              "DEBUG": {
-                "value": "true"
-              },
-              "MARK_DEBUG": {
-                "value": "true"
-              }
-            }
-          }
-        }
-      },
-      "ila_402_mhz": {
-        "vlnv": "xilinx.com:ip:system_ila:1.1",
-        "xci_name": "board_system_ila_0_5",
-        "xci_path": "ip/board_system_ila_0_5/board_system_ila_0_5.xci",
-        "inst_hier_path": "ila_402_mhz",
-        "parameters": {
-          "C_MON_TYPE": {
-            "value": "MIX"
-          },
-          "C_NUM_MONITOR_SLOTS": {
-            "value": "1"
-          },
-          "C_NUM_OF_PROBES": {
-            "value": "2"
-          },
-          "C_PROBE0_TYPE": {
-            "value": "0"
-          },
-          "C_PROBE1_TYPE": {
-            "value": "0"
-          },
-          "C_SLOT_0_APC_EN": {
-            "value": "0"
-          },
-          "C_SLOT_0_AXI_DATA_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_0_AXI_TRIG_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_0_INTF_TYPE": {
-            "value": "xilinx.com:interface:axis_rtl:1.0"
-          },
-          "C_SLOT_0_TYPE": {
-            "value": "0"
-          },
-          "C_SLOT_1_APC_EN": {
-            "value": "0"
-          },
-          "C_SLOT_1_AXI_DATA_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_1_AXI_TRIG_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_1_INTF_TYPE": {
-            "value": "xilinx.com:interface:axis_rtl:1.0"
-          },
-          "C_SLOT_1_TYPE": {
-            "value": "0"
-          },
-          "C_SLOT_2_APC_EN": {
-            "value": "0"
-          },
-          "C_SLOT_2_AXI_DATA_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_2_AXI_TRIG_SEL": {
-            "value": "1"
-          },
-          "C_SLOT_2_INTF_TYPE": {
-            "value": "xilinx.com:interface:axis_rtl:1.0"
-          }
-        },
-        "interface_ports": {
-          "SLOT_0_AXIS": {
-            "mode": "Monitor",
-            "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
-            "vlnv": "xilinx.com:interface:axis_rtl:1.0"
           }
         }
       },
@@ -1960,8 +2024,7 @@
       "AXIS1_1": {
         "interface_ports": [
           "consumer/AXIS_STREAM_RX",
-          "qsfp_data/DATA_STREAM_RX",
-          "ila_402_mhz/SLOT_0_AXIS"
+          "qsfp_data/DATA_STREAM_RX"
         ],
         "hdl_attributes": {
           "DEBUG": {
@@ -2076,28 +2139,6 @@
           "led_heartbeat"
         ]
       },
-      "consumer_lvds_data1": {
-        "ports": [
-          "consumer/lvds_data",
-          "ila_402_mhz/probe1"
-        ],
-        "hdl_attributes": {
-          "DEBUG": {
-            "value": "true"
-          }
-        }
-      },
-      "consumer_throughput1": {
-        "ports": [
-          "consumer/mb_per_sec",
-          "ila_402_mhz/probe0"
-        ],
-        "hdl_attributes": {
-          "DEBUG": {
-            "value": "true"
-          }
-        }
-      },
       "ext_reset_in_0_1": {
         "ports": [
           "pb_rst_n",
@@ -2119,7 +2160,6 @@
       "qsfp_data_sys_resetn_out": {
         "ports": [
           "qsfp_data/data_stream_resetn",
-          "ila_402_mhz/resetn",
           "consumer/stream_aresetn"
         ]
       },
@@ -2127,8 +2167,7 @@
         "ports": [
           "qsfp_data/data_stream_clk",
           "request_fifo/m_axis_aclk",
-          "consumer/stream_clk",
-          "ila_402_mhz/clk"
+          "consumer/stream_clk"
         ]
       },
       "request_button_Q": {

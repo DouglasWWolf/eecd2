@@ -20,6 +20,15 @@ module axis_consumer#
     // The megabytes-per-second of data received. 1 MB = 1,048,576 bytes
     output reg[31:0] mb_per_sec,
 
+    // This is the number of rows of data received
+    output reg[63:0] rows_rcvd,
+
+    // Elapsed seconds since the data-set transfer began
+    output reg[31:0] elapsed_secs,
+
+    // The number of data-integrity errors encountered
+    output reg[31:0] ERRORS,
+
     //========================  AXI Stream interface for the input side  ============================
     input[DATA_WIDTH-1:0]    AXIS_IN_TDATA,
     input                    AXIS_IN_TVALID,
@@ -67,8 +76,14 @@ reg[31:0] clock_cycles;
 // The number of bytes thus far transferred in the current second
 reg[63:0] bytes_per_sec;
 
+// Counts the number of seconds that have elapsed
+reg[31:0] seconds;
+
 // State of the consumer state machine
 reg[1:0] csm_state;
+
+// This will be true upon receiving the row-header of a brand-new dataset
+wire new_dataset = (csm_state == 0 && idle_watchdog == 0 && AXIS_IN_TVALID && AXIS_IN_TREADY);
 
 always @(posedge clk) begin
 
@@ -94,7 +109,7 @@ always @(posedge clk) begin
         
         // Waiting for the first data-cycle of a packet
         0:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
-         
+            
                 // If this cycle is an AXI read/write request...
                 if (packet_type == 1) begin
                     axi_data_out   <= axi_data_in;  // Fill in the data-word in AXIS_IN_TDATA
@@ -104,7 +119,13 @@ always @(posedge clk) begin
                 end
 
                 else begin
-                    
+
+                    // If we're starting a new data-set, clear the count of rows received
+                    if (idle_watchdog == 0) begin
+                        elapsed_secs <= 0;
+                        rows_rcvd    <= 0;
+                    end
+
                     // This is the first data-cycle of a row of LVDS data
                     lvds_data <= 1;
 
@@ -139,6 +160,8 @@ always @(posedge clk) begin
 
         // Here we're waiting for the row-trailer data-cycle
         2:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
+                rows_rcvd    <= rows_rcvd + 1;
+                elapsed_secs <= seconds;
                 row_complete <= 1;
                 csm_state    <= 0;
             end
@@ -146,15 +169,60 @@ always @(posedge clk) begin
     endcase
 
     // Once every second, compute the "megabytes per second" throughput rate
-    if (clock_cycles == CYCLES_PER_SECOND) begin
+    if (idle_watchdog == 0) begin
+        clock_cycles <= 0;
+        seconds      <= 0;
+    end else if (clock_cycles == CYCLES_PER_SECOND) begin
         mb_per_sec    <= bytes_per_sec >> 20;
         bytes_per_sec <= 0;
         clock_cycles  <= 0;
+        seconds       <= seconds + 1;
     end else begin
         clock_cycles <= clock_cycles + 1;
     end
 
 end
+
+
+//===============================================================================================
+// This state machine counts the number of malformed row-data records.  This is useful when
+// running a bulk data-integrity test using a specially formatted dataset
+//===============================================================================================
+
+// Every 32-bit value on the AXIS_IN_TDATA bus will be one of these values
+wire[31:0] value1 = AXIS_IN_TDATA[31:0];
+wire[31:0] value2 = AXIS_IN_TDATA[31:0] ^ 32'hFFFF_FFFF;
+wire[31:0] value3 = AXIS_IN_TDATA[31:0] ^ 32'hAAAA_AAAA;
+wire[31:0] value4 = AXIS_IN_TDATA[31:0] ^ 32'h5555_5555;
+
+always @(posedge clk) begin
+    
+    // Clear the error count whenever a new dataset begins
+    if (new_dataset)  ERRORS <= 0;
+
+    // Keep track of how many row-data data-cycles have an error
+    if (csm_state == 1 && AXIS_IN_TVALID) begin
+        if (AXIS_IN_TDATA[ 63: 32] != value2) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[ 95: 64] != value3) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[127: 96] != value4) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[159:128] != value1) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[191:160] != value2) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[223:192] != value3) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[255:224] != value4) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[287:256] != value1) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[319:288] != value2) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[351:320] != value3) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[383:352] != value4) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[415:384] != value1) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[447:416] != value2) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[479:448] != value3) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[511:480] != value4) ERRORS <= ERRORS + 1;
+    end
+
+end
+//===============================================================================================
+
+
 
 
 endmodule

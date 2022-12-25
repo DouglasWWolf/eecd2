@@ -15,7 +15,7 @@ preplace port qsfp1_clk -pg 1 -lvl 0 -x 0 -y 640 -defaultsOSRD
 preplace port qsfp1_tx -pg 1 -lvl 5 -x 1620 -y 780 -defaultsOSRD
 preplace port qsfp1_rx -pg 1 -lvl 5 -x 1620 -y 840 -defaultsOSRD -right
 preplace port DATA_STREAM_RX -pg 1 -lvl 5 -x 1620 -y 260 -defaultsOSRD
-preplace port AXI_RESPONSE_TX -pg 1 -lvl 0 -x 0 -y 1180 -defaultsOSRD
+preplace port AXIS_RESPONSE_TX -pg 1 -lvl 0 -x 0 -y 1180 -defaultsOSRD
 preplace port port-id_channel_up_0 -pg 1 -lvl 5 -x 1620 -y 140 -defaultsOSRD
 preplace port port-id_init_clk -pg 1 -lvl 0 -x 0 -y 500 -defaultsOSRD
 preplace port port-id_data_stream_clk -pg 1 -lvl 5 -x 1620 -y 500 -defaultsOSRD
@@ -41,8 +41,8 @@ preplace netloc reset_inverter_1_Res 1 2 1 780J 520n
 preplace netloc reset_inverter_Res 1 3 2 1220 80 NJ
 preplace netloc reset_manager_0_pma_init_out 1 1 1 340 400n
 preplace netloc reset_manager_0_reset_pb_out 1 1 1 320 380n
-preplace netloc resetn_in_1 1 0 3 20 1260 NJ 1260 NJ
-preplace netloc system_clock_IBUF_OUT 1 0 3 20 500 300 460 800J
+preplace netloc resetn_in_1 1 0 3 40 1260 NJ 1260 NJ
+preplace netloc system_clock_IBUF_OUT 1 0 3 40 500 300 460 800J
 preplace netloc Conn1 1 0 2 NJ 640 NJ
 preplace netloc Conn2 1 2 3 NJ 780 NJ 780 NJ
 preplace netloc Conn3 1 2 3 NJ 840 NJ 840 NJ
@@ -58,10 +58,10 @@ preplace netloc axis_rx_fifo_0_M_AXIS 1 3 1 1200 60n
 preplace netloc axis_rx_fifo_1_M_AXIS 1 3 1 N 400
 preplace netloc bandwidth_test_0_OUT_AXIS 1 0 2 NJ 300 NJ
 levelinfo -pg 1 0 170 550 1030 1410 1620
-pagesize -pg 1 -db -bbox -sgen -190 -180 1850 1320
+pagesize -pg 1 -db -bbox -sgen -200 -180 1850 1320
 ",
-   "No Loops_ScaleFactor":"0.569697",
-   "No Loops_TopLeft":"-390,0",
+   "No Loops_ScaleFactor":"0.572727",
+   "No Loops_TopLeft":"-388,0",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
 preplace port AXI_STREAM_TX -pg 1 -lvl 0 -x 0 -y 240 -defaultsOSRD

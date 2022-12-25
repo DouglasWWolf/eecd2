@@ -19,7 +19,7 @@ module axis_consumer#
     input row_requestor_idle,
 
     // This pulses high when a long break is detected in incoming data
-    output reg underflow,
+    output reg underflow_out,
 
     // This goes high every time a complete row has been received
     output reg row_complete,
@@ -119,7 +119,7 @@ always @(posedge clk) begin
     if (idle_watchdog) idle_watchdog <= idle_watchdog - 1;
 
     // If we go too long without receiving row-data, pulse the "underflow" output
-    underflow <= (~row_requestor_idle && idle_watchdog == 1);
+    underflow_out <= (~row_requestor_idle && idle_watchdog == 1);
 
     // If a new dataset is starting...
     if (new_dataset) begin

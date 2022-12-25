@@ -411,7 +411,7 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
-        <spirit:name>underflow</spirit:name>
+        <spirit:name>underflow_out</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:wireTypeDefs>

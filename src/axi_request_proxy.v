@@ -94,9 +94,13 @@ module axi_request_proxy
     wire[31:0] axi_data_in = AXIS_IN_TDATA[63:32];
     wire       axi_mode_in = AXIS_IN_TDATA[64];
 
+    // axi4lite responses are always packet type 0
+    assign AXIS_OUT_TDATA[255:248] = 0;
+
     reg[31:0] axi_addr_out; assign AXIS_OUT_TDATA[31:00] = axi_addr_out;
     reg[31:0] axi_data_out; assign AXIS_OUT_TDATA[63:32] = axi_data_out;
     reg[ 1:0] axi_resp_out; assign AXIS_OUT_TDATA[65:64] = axi_resp_out;
+    
     //===============================================================================================
 
 

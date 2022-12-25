@@ -294,11 +294,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sun Dec 25 06:59:08 UTC 2022</spirit:value>
+            <spirit:value>Sun Dec 25 21:55:35 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:09c3b1b9</spirit:value>
+            <spirit:value>9:c3b00440</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -312,11 +312,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sun Dec 25 07:00:03 UTC 2022</spirit:value>
+            <spirit:value>Sun Dec 25 22:42:12 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:ab01d14e</spirit:value>
+            <spirit:value>9:ff0c0cee</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -412,25 +412,6 @@
       </spirit:port>
       <spirit:port>
         <spirit:name>probe4</spirit:name>
-        <spirit:wire>
-          <spirit:direction>in</spirit:direction>
-          <spirit:vector>
-            <spirit:left spirit:format="long">0</spirit:left>
-            <spirit:right spirit:format="long">0</spirit:right>
-          </spirit:vector>
-          <spirit:wireTypeDefs>
-            <spirit:wireTypeDef>
-              <spirit:typeName>std_logic_vector</spirit:typeName>
-              <spirit:viewNameRef>xilinx_elaborateports</spirit:viewNameRef>
-            </spirit:wireTypeDef>
-          </spirit:wireTypeDefs>
-          <spirit:driver>
-            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
-          </spirit:driver>
-        </spirit:wire>
-      </spirit:port>
-      <spirit:port>
-        <spirit:name>probe5</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
@@ -1070,10 +1051,6 @@
       <spirit:enumeration>MANUAL</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_list_872119c6</spirit:name>
-      <spirit:enumeration>0.5</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
       <spirit:name>choice_list_8af5a703</spirit:name>
       <spirit:enumeration>0</spirit:enumeration>
       <spirit:enumeration>1</spirit:enumeration>
@@ -1087,6 +1064,10 @@
       <spirit:enumeration>4</spirit:enumeration>
       <spirit:enumeration>5</spirit:enumeration>
       <spirit:enumeration>6</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_c821f6c7</spirit:name>
+      <spirit:enumeration>14.5</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_d4fc98f8</spirit:name>
@@ -3342,7 +3323,7 @@
     <spirit:parameter>
       <spirit:name>C_BRAM_CNT</spirit:name>
       <spirit:displayName>BRAM utilization count</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.C_BRAM_CNT" spirit:choiceRef="choice_list_872119c6" spirit:order="9.1038e+07">0.5</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.C_BRAM_CNT" spirit:choiceRef="choice_list_c821f6c7" spirit:order="9.1038e+07">14.5</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -29514,7 +29495,7 @@
     <spirit:parameter>
       <spirit:name>C_NUM_OF_PROBES</spirit:name>
       <spirit:displayName>Number of Probes</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_OF_PROBES" spirit:order="10700" spirit:configGroups="1 UnGrouped" spirit:minimum="0" spirit:maximum="1024" spirit:rangeType="long">6</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_NUM_OF_PROBES" spirit:order="10700" spirit:configGroups="1 UnGrouped" spirit:minimum="0" spirit:maximum="1024" spirit:rangeType="long">5</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>

@@ -14,7 +14,17 @@ module axis_consumer#
 ) 
 (
     input clk,
+    
+    // This is high when the row-request engine is idle, low when that engine issuing requests
+    input row_requestor_idle,
+
+    // This pulses high when a long break is detected in incoming data
+    output reg underflow,
+
+    // This goes high every time a complete row has been received
     output reg row_complete,
+    
+    // This goes high every time the first cycle of a new row of data has been received
     output reg lvds_data,
 
     // The megabytes-per-second of data received. 1 MB = 1,048,576 bytes
@@ -27,7 +37,7 @@ module axis_consumer#
     output reg[31:0] elapsed_secs,
 
     // The number of data-integrity errors encountered
-    output reg[31:0] ERRORS,
+    output reg[31:0] errors,
 
     //========================  AXI Stream interface for the input side  ============================
     input[DATA_WIDTH-1:0]    AXIS_IN_TDATA,
@@ -61,8 +71,8 @@ reg       axi_mode_out; assign AXI_REQ_TDATA[64   ] = axi_mode_out;
 // This is the frequency of 'clk'
 localparam CYCLES_PER_SECOND = 402832031;
 
-// If no stream data arrives in this many cycles, the state machine resets
-localparam IDLE_TIMEOUT = 400000000;
+// If no row-data arrives for this many cycles, an underflow has occured
+localparam UNDERFLOW_TIMEOUT = 1000;
 
 // Counts the number of cycles that have occured where data is received
 reg[7:0] data_cycle_counter;
@@ -82,10 +92,16 @@ reg[31:0] seconds;
 // State of the consumer state machine
 reg[1:0] csm_state;
 
-// This will be true upon receiving the row-header of a brand-new dataset
-wire new_dataset = (csm_state == 0 && idle_watchdog == 0 && AXIS_IN_TVALID && AXIS_IN_TREADY);
+// We're going to watch for a low-going edge on "row_requestor_idle"
+reg old_row_requestor_idle = 1;
+
+// A new dataset begins on a low-going edge of "row_requestor_idle"
+wire new_dataset = (old_row_requestor_idle == 1 && row_requestor_idle == 0);
 
 always @(posedge clk) begin
+
+    // Keep track of the current state of "row_requestor_idle" for the next cycle
+    old_row_requestor_idle <= row_requestor_idle;
 
     // We're always ready to receive data
     AXIS_IN_TREADY <= 1;
@@ -100,12 +116,19 @@ always @(posedge clk) begin
     lvds_data <= 0;
 
     // Count down the watchdog timer that tells how long since we've received row data
-    if (idle_watchdog)
-        idle_watchdog <= idle_watchdog - 1;
-    else
-        csm_state <= 0;
+    if (idle_watchdog) idle_watchdog <= idle_watchdog - 1;
 
-    case(csm_state)
+    // If we go too long without receiving row-data, pulse the "underflow" output
+    underflow <= (~row_requestor_idle && idle_watchdog == 1);
+
+    // If a new dataset is starting...
+    if (new_dataset) begin
+        elapsed_secs  <= 0;
+        rows_rcvd     <= 0;
+        csm_state     <= 0;
+        bytes_per_sec <= 0;
+
+    end else case(csm_state)
         
         // Waiting for the first data-cycle of a packet
         0:  if (AXIS_IN_TVALID & AXIS_IN_TREADY) begin
@@ -120,17 +143,11 @@ always @(posedge clk) begin
 
                 else begin
 
-                    // If we're starting a new data-set, clear the count of rows received
-                    if (idle_watchdog == 0) begin
-                        elapsed_secs <= 0;
-                        rows_rcvd    <= 0;
-                    end
-
                     // This is the first data-cycle of a row of LVDS data
                     lvds_data <= 1;
 
                     // Receiving data means we're no longer idle
-                    idle_watchdog <= IDLE_TIMEOUT;
+                    idle_watchdog <= UNDERFLOW_TIMEOUT;
 
                     // Next data-cycle is the first cycle of row-data
                     data_cycle_counter <= 1;
@@ -147,7 +164,7 @@ always @(posedge clk) begin
                 bytes_per_sec <= bytes_per_sec + 64;
 
                 // The input stream isn't idle
-                idle_watchdog <= IDLE_TIMEOUT;
+                idle_watchdog <= UNDERFLOW_TIMEOUT;
 
                 // If this is the 32nd data-cycle, it the last of the data for this row
                 if (data_cycle_counter == 32) begin
@@ -169,7 +186,7 @@ always @(posedge clk) begin
     endcase
 
     // Once every second, compute the "megabytes per second" throughput rate
-    if (idle_watchdog == 0) begin
+    if (new_dataset) begin
         clock_cycles <= 0;
         seconds      <= 0;
     end else if (clock_cycles == CYCLES_PER_SECOND) begin
@@ -198,31 +215,28 @@ wire[31:0] value4 = AXIS_IN_TDATA[31:0] ^ 32'h5555_5555;
 always @(posedge clk) begin
     
     // Clear the error count whenever a new dataset begins
-    if (new_dataset)  ERRORS <= 0;
+    if (new_dataset)  errors <= 0;
 
     // Keep track of how many row-data data-cycles have an error
     if (csm_state == 1 && AXIS_IN_TVALID) begin
-        if (AXIS_IN_TDATA[ 63: 32] != value2) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[ 95: 64] != value3) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[127: 96] != value4) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[159:128] != value1) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[191:160] != value2) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[223:192] != value3) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[255:224] != value4) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[287:256] != value1) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[319:288] != value2) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[351:320] != value3) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[383:352] != value4) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[415:384] != value1) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[447:416] != value2) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[479:448] != value3) ERRORS <= ERRORS + 1;
-        if (AXIS_IN_TDATA[511:480] != value4) ERRORS <= ERRORS + 1;
+        if (AXIS_IN_TDATA[ 63: 32] != value2) errors <= errors + 1;
+        if (AXIS_IN_TDATA[ 95: 64] != value3) errors <= errors + 1;
+        if (AXIS_IN_TDATA[127: 96] != value4) errors <= errors + 1;
+        if (AXIS_IN_TDATA[159:128] != value1) errors <= errors + 1;
+        if (AXIS_IN_TDATA[191:160] != value2) errors <= errors + 1;
+        if (AXIS_IN_TDATA[223:192] != value3) errors <= errors + 1;
+        if (AXIS_IN_TDATA[255:224] != value4) errors <= errors + 1;
+        if (AXIS_IN_TDATA[287:256] != value1) errors <= errors + 1;
+        if (AXIS_IN_TDATA[319:288] != value2) errors <= errors + 1;
+        if (AXIS_IN_TDATA[351:320] != value3) errors <= errors + 1;
+        if (AXIS_IN_TDATA[383:352] != value4) errors <= errors + 1;
+        if (AXIS_IN_TDATA[415:384] != value1) errors <= errors + 1;
+        if (AXIS_IN_TDATA[447:416] != value2) errors <= errors + 1;
+        if (AXIS_IN_TDATA[479:448] != value3) errors <= errors + 1;
+        if (AXIS_IN_TDATA[511:480] != value4) errors <= errors + 1;
     end
 
 end
 //===============================================================================================
-
-
-
 
 endmodule

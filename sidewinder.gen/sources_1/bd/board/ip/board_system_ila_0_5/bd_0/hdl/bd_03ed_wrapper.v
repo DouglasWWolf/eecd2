@@ -17,6 +17,7 @@ module bd_03ed_wrapper
     probe2,
     probe3,
     probe4,
+    probe5,
     resetn);
   input [511:0]SLOT_0_AXIS_tdata;
   input SLOT_0_AXIS_tlast;
@@ -27,7 +28,8 @@ module bd_03ed_wrapper
   input [0:0]probe1;
   input [31:0]probe2;
   input [63:0]probe3;
-  input [31:0]probe4;
+  input [0:0]probe4;
+  input [31:0]probe5;
   input resetn;
 
   wire [511:0]SLOT_0_AXIS_tdata;
@@ -39,7 +41,8 @@ module bd_03ed_wrapper
   wire [0:0]probe1;
   wire [31:0]probe2;
   wire [63:0]probe3;
-  wire [31:0]probe4;
+  wire [0:0]probe4;
+  wire [31:0]probe5;
   wire resetn;
 
   bd_03ed bd_03ed_i
@@ -53,5 +56,6 @@ module bd_03ed_wrapper
         .probe2(probe2),
         .probe3(probe3),
         .probe4(probe4),
+        .probe5(probe5),
         .resetn(resetn));
 endmodule

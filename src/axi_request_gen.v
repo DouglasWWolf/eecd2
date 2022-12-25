@@ -21,10 +21,13 @@ module axi_request_gen
     input clk, resetn,
 
     // This will pulse high every time a complete row of data has been received from ECD_Master
-    input ROW_COMPLETE,
+    input row_complete_in,
+
+    // This is high when we're not busy generating row-requests
+    output idle_out,
 
     // A pulse from this signal generates 8 requests
-    input BUTTON,
+    input button,
     
     //========================  AXI Stream interface for sending requests  ==========================
     output reg[255:0]  AXIS_TX_TDATA,
@@ -113,8 +116,10 @@ module axi_request_gen
     reg start_requesting;
 
     // State of the "requester state-machine"
-    reg[1:0] rsm_state;
+    reg rsm_state;
 
+    // The 'idle_out' line is high when the requestor-state-machine is idle
+    assign idle_out = (rsm_state == 0);
     
     //==========================================================================
     // This state machine handles AXI write-requests
@@ -134,7 +139,7 @@ module axi_request_gen
         end else begin
 
             // Pressing the button sends a block of 8 requests
-            if (BUTTON) begin
+            if (button) begin
                 axi_register[REG_COUNTH] <= 0;
                 axi_register[REG_COUNTL] <= 8;
                 start_requesting         <= 1;
@@ -215,7 +220,7 @@ module axi_request_gen
     always @(posedge clk) begin
         
         // Keep track of the number of row-requests that have been fullfilled
-        if (rsm_state && ROW_COMPLETE) requests_completed <= requests_completed + 1;
+        if (rsm_state && row_complete_in) requests_completed <= requests_completed + 1;
 
         if (resetn == 0) begin
             rsm_state <= 0;

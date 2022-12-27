@@ -30,6 +30,9 @@ module event_reporter #
 
 reg fsm_state;
 
+localparam MESSAGE_TYPE = 1;
+localparam EVENT_TYPE   = 1;
+
 always @(posedge clk) begin
     
     if (resetn == 0) begin
@@ -39,15 +42,15 @@ always @(posedge clk) begin
 
         0:  if (report_underflow) begin
                 AXIS_OUT_TDATA          <= 0;
-                AXIS_OUT_TDATA[255:248] <= 1;
-                AXIS_OUT_TDATA[7:0]     <= 1;
+                AXIS_OUT_TDATA[255:248] <= MESSAGE_TYPE;
+                AXIS_OUT_TDATA[7:0]     <= EVENT_TYPE;
                 AXIS_OUT_TVALID         <= 1;
                 fsm_state               <= 1;
             end
 
         1:  if (AXIS_OUT_TREADY & AXIS_OUT_TVALID) begin
                 AXIS_OUT_TVALID <= 0;
-                fsm_state       <= 1;
+                fsm_state       <= 0;
             end
     endcase
 

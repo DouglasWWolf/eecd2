@@ -39,8 +39,8 @@
       "row_request_generator": "",
       "axi_stream_switch": "",
       "axi4lite_request_proxy": "",
-      "event_reporter": "",
-      "axis_register_slice": ""
+      "axis_register_slice": "",
+      "event_reporter": ""
     },
     "interface_ports": {
       "clk_100mhz": {
@@ -244,7 +244,7 @@
             "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
             "vlnv": "xilinx.com:interface:axis_rtl:1.0"
           },
-          "AXIS_RESPONSE_TX": {
+          "EVENT_STREAM_TX": {
             "mode": "Slave",
             "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
             "vlnv": "xilinx.com:interface:axis_rtl:1.0"
@@ -507,7 +507,7 @@
           },
           "Conn4": {
             "interface_ports": [
-              "AXIS_RESPONSE_TX",
+              "EVENT_STREAM_TX",
               "axis_clock_converter/S_AXIS"
             ]
           },
@@ -2300,6 +2300,12 @@
           }
         }
       },
+      "axis_register_slice": {
+        "vlnv": "xilinx.com:ip:axis_register_slice:1.1",
+        "xci_name": "board_axis_register_slice_0_0",
+        "xci_path": "ip/board_axis_register_slice_0_0/board_axis_register_slice_0_0.xci",
+        "inst_hier_path": "axis_register_slice"
+      },
       "event_reporter": {
         "vlnv": "xilinx.com:module_ref:event_reporter:1.0",
         "xci_name": "board_event_reporter_0_0",
@@ -2412,12 +2418,6 @@
             "direction": "I"
           }
         }
-      },
-      "axis_register_slice": {
-        "vlnv": "xilinx.com:ip:axis_register_slice:1.1",
-        "xci_name": "board_axis_register_slice_0_0",
-        "xci_path": "ip/board_axis_register_slice_0_0/board_axis_register_slice_0_0.xci",
-        "inst_hier_path": "axis_register_slice"
       }
     },
     "interface_nets": {
@@ -2492,7 +2492,7 @@
       "axis_register_slice_0_M_AXIS": {
         "interface_ports": [
           "axis_register_slice/M_AXIS",
-          "qsfp_data/AXIS_RESPONSE_TX"
+          "qsfp_data/EVENT_STREAM_TX"
         ]
       },
       "consumer_M_AXIS": {
@@ -2626,8 +2626,8 @@
           "row_request_generator/clk",
           "axi_stream_switch/clk",
           "axi4lite_request_proxy/clk",
-          "event_reporter/clk",
-          "axis_register_slice/aclk"
+          "axis_register_slice/aclk",
+          "event_reporter/clk"
         ]
       },
       "system_reset_peripheral_aresetn": {
@@ -2640,8 +2640,8 @@
           "qsfp_data/resetn_in",
           "row_request_generator/resetn",
           "axi4lite_request_proxy/resetn",
-          "event_reporter/resetn",
-          "axis_register_slice/aresetn"
+          "axis_register_slice/aresetn",
+          "event_reporter/resetn"
         ]
       }
     },

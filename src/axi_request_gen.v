@@ -158,7 +158,7 @@ module axi_request_gen
 
                     REG_START: 
                         begin
-                            start_requesting <= 1;
+                            if (rsm_state == 0) start_requesting <= 1;
                         end
 
                     // A write to any other address is a slave-error

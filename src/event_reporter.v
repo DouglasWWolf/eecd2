@@ -86,9 +86,6 @@ end
 //===============================================================================================
 // The state of this state machine
 reg fsm_state;
-
-// If this is '0', the state machine should wait for an AXI-Stream handshake before continuing
-reg skip_handshake;
 //===============================================================================================
 always @(posedge clk) begin
     
@@ -105,14 +102,14 @@ always @(posedge clk) begin
 
         // Here we wait around for an event-group to arrive at the read-end of the FIFO
         0: if (~fifo_empty) begin
-                event_group    <= fifo_dout;
-                fifo_rden      <= 1;
-                skip_handshake <= 1;
-                fsm_state      <= 1;
+                event_group     <= fifo_dout;
+                fifo_rden       <= 1;
+                AXIS_OUT_TVALID <= 0;
+                fsm_state       <= 1;
             end
 
         // Here we write a data-cycle to the output stream for each bit in the group that is a '1'
-        1:  if (skip_handshake || (AXIS_OUT_TVALID & AXIS_OUT_TREADY)) begin
+        1:  if (AXIS_OUT_TVALID == 0 || AXIS_OUT_TREADY) begin
                 
                 if (event_group == 0)
                     fsm_state <= 0;
@@ -133,7 +130,6 @@ always @(posedge clk) begin
                 end
 
                 AXIS_OUT_TVALID <= (event_group != 0);
-                skip_handshake  <= 0;
             end
 
     endcase

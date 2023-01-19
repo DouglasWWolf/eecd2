@@ -18,8 +18,11 @@ module axis_consumer#
     // This is high when the row-request engine is idle, low when that engine issuing requests
     input row_requestor_idle,
 
-    // This pulses high when a long break is detected in incoming data
+    // This pulses high when a long break is detected in incoming data and "row_requestor_idle' is low
     output reg underflow_out,
+    
+    // This pulses high when a long break is detecting in incoming data and 'row_requestor_idle' is high
+    output reg job_complete_out,
 
     // This goes high every time a complete row has been received
     output reg row_complete,
@@ -120,6 +123,9 @@ always @(posedge clk) begin
 
     // If we go too long without receiving row-data, pulse the "underflow" output
     underflow_out <= (~row_requestor_idle && idle_watchdog == 1);
+
+    // If the idle-watchdog runs out of time while the row-requestor is idle, the sequencing job has completed
+    job_complete_out <= (row_requestor_idle && idle_watchdog == 1);
 
     // If a new dataset is starting...
     if (new_dataset) begin

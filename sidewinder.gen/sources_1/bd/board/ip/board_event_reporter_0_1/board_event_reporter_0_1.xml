@@ -298,7 +298,7 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
-        <spirit:name>report_event_a</spirit:name>
+        <spirit:name>report_jobcomplete</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:wireTypeDefs>

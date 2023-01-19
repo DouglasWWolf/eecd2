@@ -423,6 +423,18 @@
         </spirit:wire>
       </spirit:port>
       <spirit:port>
+        <spirit:name>job_complete_out</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>reg</spirit:typeName>
+              <spirit:viewNameRef>dummy_view</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
         <spirit:name>row_complete</spirit:name>
         <spirit:wire>
           <spirit:direction>out</spirit:direction>

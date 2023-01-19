@@ -16,7 +16,7 @@ module event_reporter
 (
     input clk, resetn,
 
-    input report_underflow, report_event_a, report_event_b,
+    input report_underflow, report_jobcomplete, report_event_b,
 
     //========================  AXI Stream interface for the output side  ===========================
     output[255:0]  AXIS_OUT_TDATA,
@@ -30,24 +30,24 @@ module event_reporter
 localparam EVENT_TYPES = 3;
 
 // This is the bit position in 'event_list that represents a given event
-localparam EVT_UNDERFLOW = 0;
-localparam EVT_EVENT_A   = 1;
-localparam EVT_EVENT_B   = 2;
+localparam EVT_UNDERFLOW   = 0;
+localparam EVT_JOBCOMPLETE = 1;
+localparam EVT_EVENT_B     = 2;
 
 // This aggregates all of the event input strobes into a single 'event_list'
 wire[EVENT_TYPES-1:0] event_list;
-assign event_list[EVT_UNDERFLOW] = report_underflow;
-assign event_list[EVT_EVENT_A  ] = report_event_a;
-assign event_list[EVT_EVENT_B  ] = report_event_b;
+assign event_list[EVT_UNDERFLOW  ] = report_underflow;
+assign event_list[EVT_JOBCOMPLETE] = report_jobcomplete;
+assign event_list[EVT_EVENT_B    ] = report_event_b;
  
 // This is the input to the FIFO, a registered version of 'event_list'
 reg[EVENT_TYPES-1:0] fifo_din;
 
 // These 'event constants' are the event-codes that will be written to the output AXI Stream 
 wire[7:0] event_constant[0:EVENT_TYPES-1];
-assign event_constant[EVT_UNDERFLOW] = 1;
-assign event_constant[EVT_EVENT_A  ] = 2;
-assign event_constant[EVT_EVENT_B  ] = 3;
+assign event_constant[EVT_UNDERFLOW  ] = 1;
+assign event_constant[EVT_JOBCOMPLETE] = 2;
+assign event_constant[EVT_EVENT_B    ] = 3;
 
 // This is the output of the FIFO and is the report_XXX input signals all grouped together
 wire[EVENT_TYPES-1:0] fifo_dout;

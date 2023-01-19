@@ -33,7 +33,8 @@
         "axi_request_fifo": "",
         "ila_rx_data_402": "",
         "underflow_cdc": "",
-        "axis_consumer": ""
+        "axis_consumer": "",
+        "job_complete_cdc": ""
       },
       "axi_gpio_leds": "",
       "system_interconnect": "",
@@ -44,7 +45,8 @@
       },
       "unused_tied_low": "",
       "row_request_generator": "",
-      "event_reporter": ""
+      "event_reporter": "",
+      "system_ila_0": ""
     },
     "interface_ports": {
       "clk_100mhz": {
@@ -776,6 +778,9 @@
           },
           "underflow_out": {
             "direction": "O"
+          },
+          "job_complete_out": {
+            "direction": "O"
           }
         },
         "components": {
@@ -1086,6 +1091,9 @@
               "underflow_out": {
                 "direction": "O"
               },
+              "job_complete_out": {
+                "direction": "O"
+              },
               "row_complete": {
                 "direction": "O"
               },
@@ -1111,6 +1119,23 @@
                 "direction": "O",
                 "left": "31",
                 "right": "0"
+              }
+            }
+          },
+          "job_complete_cdc": {
+            "vlnv": "xilinx.com:ip:xpm_cdc_gen:1.0",
+            "xci_name": "board_row_complete_cdc_1",
+            "xci_path": "ip/board_row_complete_cdc_1/board_row_complete_cdc_1.xci",
+            "inst_hier_path": "consumer/job_complete_cdc",
+            "parameters": {
+              "CDC_TYPE": {
+                "value": "xpm_cdc_pulse"
+              },
+              "RST_USED": {
+                "value": "false"
+              },
+              "SIM_ASSERT_CHK": {
+                "value": "false"
               }
             }
           }
@@ -1145,6 +1170,12 @@
           }
         },
         "nets": {
+          "axis_consumer_job_complete_out": {
+            "ports": [
+              "axis_consumer/job_complete_out",
+              "job_complete_cdc/src_pulse"
+            ]
+          },
           "axis_consumer_lvds_data": {
             "ports": [
               "axis_consumer/lvds_data",
@@ -1184,7 +1215,8 @@
               "slow_clk",
               "row_complete_cdc/dest_clk",
               "axi_request_fifo/m_axis_aclk",
-              "underflow_cdc/dest_clk"
+              "underflow_cdc/dest_clk",
+              "job_complete_cdc/dest_clk"
             ]
           },
           "elapsed_secs": {
@@ -1215,6 +1247,12 @@
               }
             }
           },
+          "job_complete_cdc_dest_pulse": {
+            "ports": [
+              "job_complete_cdc/dest_pulse",
+              "job_complete_out"
+            ]
+          },
           "qsfp_data_user_clk_out": {
             "ports": [
               "stream_clk",
@@ -1222,7 +1260,8 @@
               "axi_request_fifo/s_axis_aclk",
               "ila_rx_data_402/clk",
               "underflow_cdc/src_clk",
-              "axis_consumer/clk"
+              "axis_consumer/clk",
+              "job_complete_cdc/src_clk"
             ]
           },
           "row_complete": {
@@ -2043,7 +2082,12 @@
             "interface_ports": [
               "AXIS_IN2",
               "axi_stream_switch/AXIS_IN2"
-            ]
+            ],
+            "hdl_attributes": {
+              "DEBUG": {
+                "value": "true"
+              }
+            }
           }
         },
         "nets": {
@@ -2518,11 +2562,44 @@
           "report_underflow": {
             "direction": "I"
           },
-          "report_event_a": {
+          "report_jobcomplete": {
             "direction": "I"
           },
           "report_event_b": {
             "direction": "I"
+          }
+        }
+      },
+      "system_ila_0": {
+        "vlnv": "xilinx.com:ip:system_ila:1.1",
+        "xci_name": "board_system_ila_0_6",
+        "xci_path": "ip/board_system_ila_0_6/board_system_ila_0_6.xci",
+        "inst_hier_path": "system_ila_0",
+        "parameters": {
+          "C_MON_TYPE": {
+            "value": "INTERFACE"
+          },
+          "C_NUM_MONITOR_SLOTS": {
+            "value": "1"
+          },
+          "C_SLOT_0_APC_EN": {
+            "value": "0"
+          },
+          "C_SLOT_0_AXI_DATA_SEL": {
+            "value": "1"
+          },
+          "C_SLOT_0_AXI_TRIG_SEL": {
+            "value": "1"
+          },
+          "C_SLOT_0_INTF_TYPE": {
+            "value": "xilinx.com:interface:axis_rtl:1.0"
+          }
+        },
+        "interface_ports": {
+          "SLOT_0_AXIS": {
+            "mode": "Monitor",
+            "vlnv_bus_definition": "xilinx.com:interface:axis:1.0",
+            "vlnv": "xilinx.com:interface:axis_rtl:1.0"
           }
         }
       }
@@ -2605,8 +2682,17 @@
       "event_reporter_0_AXIS_OUT": {
         "interface_ports": [
           "event_reporter/AXIS_OUT",
-          "stream_switch/AXIS_IN2"
-        ]
+          "stream_switch/AXIS_IN2",
+          "system_ila_0/SLOT_0_AXIS"
+        ],
+        "hdl_attributes": {
+          "DEBUG": {
+            "value": "true"
+          },
+          "MARK_DEBUG": {
+            "value": "true"
+          }
+        }
       },
       "qsfp1_clk_1": {
         "interface_ports": [
@@ -2656,6 +2742,12 @@
         "ports": [
           "blinker/LED",
           "led_heartbeat"
+        ]
+      },
+      "consumer_dest_pulse": {
+        "ports": [
+          "consumer/job_complete_out",
+          "event_reporter/report_jobcomplete"
         ]
       },
       "consumer_row_complete": {
@@ -2727,7 +2819,8 @@
           "axi4lite_request_proxy/clk",
           "stream_switch/clk",
           "row_request_generator/clk",
-          "event_reporter/clk"
+          "event_reporter/clk",
+          "system_ila_0/clk"
         ]
       },
       "system_reset_peripheral_aresetn": {
@@ -2741,13 +2834,13 @@
           "axi4lite_request_proxy/resetn",
           "stream_switch/aresetn",
           "row_request_generator/resetn",
-          "event_reporter/resetn"
+          "event_reporter/resetn",
+          "system_ila_0/resetn"
         ]
       },
       "tied_low_dout": {
         "ports": [
           "unused_tied_low/dout",
-          "event_reporter/report_event_a",
           "event_reporter/report_event_b"
         ]
       }
